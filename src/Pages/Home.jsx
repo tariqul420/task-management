@@ -1,11 +1,17 @@
+import useAuth from "../Hook/useAuth";
 import Login_Register from "./Auth/Login_Register";
 
-const Home = () => {
+const Dashboard = () => {
+
+    const { user } = useAuth();
+
     return (
-        <div>
+        user ? (
+            <Dashboard/>
+        ) : (
             <Login_Register/>
-        </div>
+        )
     );
 };
 
-export default Home;
+export default Dashboard;

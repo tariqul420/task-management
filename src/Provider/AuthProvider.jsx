@@ -1,10 +1,10 @@
-
 import axios from "axios";
-import { createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
 import PropTypes from "prop-types";
 import { createContext, useEffect, useState } from "react";
 import auth from "../Firebase/Firebase.init";
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
@@ -32,14 +32,6 @@ const AuthProvider = ({ children }) => {
         return signOut(auth)
     }
 
-    const updateUserProfile = (name, photoUrl) => {
-        setLoading(true)
-        return updateProfile(auth.currentUser, {
-            displayName: name,
-            photoURL: photoUrl
-        })
-    }
-
     const resetPassword = (email) => {
         setLoading(true)
         return sendPasswordResetEmail(auth, email)
@@ -50,15 +42,8 @@ const AuthProvider = ({ children }) => {
             setLoading(false)
             setUser(currentUser)
 
-            if (currentUser?.email) {
-                const userInformation = { email: currentUser?.email }
-                await axios.post(`${import.meta.env.VITE_SERVER_API_URL}/jwt`, userInformation, { withCredentials: true })
-
-                setLoading(false)
-            } else {
+            if (!currentUser.email | currentUser) {
                 await axios.get(`${import.meta.env.VITE_SERVER_API_URL}/logout`, { withCredentials: true });
-
-                setLoading(false)
             }
 
             setLoading(false)
@@ -78,7 +63,6 @@ const AuthProvider = ({ children }) => {
         createUser,
         loginUser,
         logOutUser,
-        updateUserProfile,
         resetPassword,
         email,
         setEmail

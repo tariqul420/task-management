@@ -1,17 +1,22 @@
+import { useNavigate } from "react-router";
 import useAuth from "../Hook/useAuth";
 import Login_Register from "./Auth/Login_Register";
 
-const Dashboard = () => {
-
+const Home = () => {
     const { user } = useAuth();
+    const navigate = useNavigate();
+
+    if(!user) {
+        return <p className="text-center">Loading.....</p>
+    }
 
     return (
         user ? (
-            <Dashboard/>
+            navigate('/dashboard/todo')
         ) : (
             <Login_Register/>
         )
     );
 };
 
-export default Dashboard;
+export default Home;

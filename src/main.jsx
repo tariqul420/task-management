@@ -5,6 +5,7 @@ import './index.css';
 import Root from './Layouts/Root.jsx';
 import AuthProvider from './Provider/AuthProvider.jsx';
 import Home from './Pages/Home';
+import { Toaster } from 'react-hot-toast'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -15,6 +16,7 @@ createRoot(document.getElementById('root')).render(
     <Route index element={<Home />} />
   </Route>
 </Routes>
+<Toaster position='top-right' reverseOrder={false} />
   </BrowserRouter>
     </AuthProvider>
   </StrictMode>,

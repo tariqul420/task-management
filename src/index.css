@@ -1,2 +1,44 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+@theme{
+    --color-primary: #fae150;
+}
+
+@layer components {
+    .inputField {
+        padding-top: 0.75rem; /* py-3 */
+        padding-bottom: 0.75rem; /* py-3 */
+        background-color: var(--color-text); /* dark:bg-color-text (use your custom color variable) */
+        font-weight: 500; /* font-medium */
+        padding-left: 1rem; /* px-4 */
+        padding-right: 1rem; /* px-4 */
+        border: 1px solid #d1d5db; /* border-gray-300 */
+        outline: none;
+        border-radius: 0.5rem; /* rounded-lg */
+        width: 100%;
+      }
+      
+      .inputField:focus {
+        outline-color: var(--color-accent); /* focus:outline-color-accent (custom accent color) */
+      }
+      
+      .inputField:focus.dark {
+        outline-color: var(--color-accent); /* focus:dark:outline-color-accent */
+      }
+      
+      .inputButton {
+        width: 100%; /* w-full */
+        padding-top: 0.75rem; /* py-3 */
+        padding-bottom: 0.75rem; /* py-3 */
+        padding-left: 1rem; /* px-4 */
+        padding-right: 1rem; /* px-4 */
+        background-color: var(--color-accent); /* bg-color-accent (custom color) */
+        color: white; /* text-white */
+        border: none;
+        font-weight: bold; /* font-bold */
+        outline: none;
+        border-radius: 0.5rem; /* rounded-lg */
+        margin-top: 0.75rem; /* mt-3 */
+      }      
+  }

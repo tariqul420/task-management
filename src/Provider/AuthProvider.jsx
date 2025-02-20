@@ -12,6 +12,8 @@ const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [email, setEmail] = useState("")
 
+    console.log('user-data', user)
+
     const socialAuth = (provider) => {
         setLoading(true)
         return signInWithPopup(auth, provider)

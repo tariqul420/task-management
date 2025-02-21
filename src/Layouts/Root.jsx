@@ -3,8 +3,8 @@ import { Outlet } from "react-router";
 
 const Root = () => {
     return (
-        <div>
-            <Outlet/>
+        <div className="bg-gray-100 dark:bg-[#09101a] dark:text-white">
+            <Outlet />
         </div>
     );
 };

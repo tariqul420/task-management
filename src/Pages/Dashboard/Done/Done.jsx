@@ -7,30 +7,30 @@ import LoadingSkeleton from "../../../Loading/LoadingSkelton";
 
 const InProgress = () => {
     const axiosSecure = useAxiosSecure();
-    const {user} = useAuth();
+    const { user } = useAuth();
 
-    const {data: tasks = [], refetch, isLoading} = useQuery({
+    const { data: tasks = [], refetch, isLoading } = useQuery({
         queryKey: ['tasks', user?.email],
         queryFn: async () => {
-            const {data} = await axiosSecure.get(`/tasks/${user.email}?category=done`);
+            const { data } = await axiosSecure.get(`/tasks/${user.email}?category=done`);
             return data;
         },
-    }) 
+    })
 
     // Delete Task
-// Delete Task
-const handelDeleteTask = async (id) => {
-    console.log("Deleting task with ID:", id);
+    // Delete Task
+    const handelDeleteTask = async (id) => {
+        console.log("Deleting task with ID:", id);
 
-    try {
-        await axiosSecure.delete(`/tasks/${id}`);
-        refetch(); // Refresh the task list after deletion
-        toast.success("Task deleted successfully ❤️");
-    } catch (error) {
-        console.error("Failed to delete task:", error);
-        toast.error("Failed to delete task");
-    }
-};
+        try {
+            await axiosSecure.delete(`/tasks/${id}`);
+            refetch(); // Refresh the task list after deletion
+            toast.success("Task deleted successfully ❤️");
+        } catch (error) {
+            console.error("Failed to delete task:", error);
+            toast.error("Failed to delete task");
+        }
+    };
 
 
     // Update Task
@@ -53,18 +53,18 @@ const handelDeleteTask = async (id) => {
         }
     };
 
-    if(isLoading) <LoadingSkeleton />
+    if (isLoading) <LoadingSkeleton />
 
     return (
-       <div className="p-6 bg-white shadow-lg rounded-xl min-h-[72vh]">
-                   <h2 className="text-2xl font-bold mb-4">Done Task</h2>
-       
-                   <div className="mt-4 grid grid-cols-2 gap-2">
-                               {tasks?.map((task) => (
-                                   <TaskItem key={task._id} task={task} handelDeleteTask={handelDeleteTask} updateTask={updateTask} />
-                               ))}
-                           </div>
-               </div>
+        <div className="p-6  shadow-lg rounded-xl min-h-[72vh]">
+            <h2 className="text-2xl font-bold mb-4">Done Task</h2>
+
+            <div className="mt-4 grid grid-cols-2 gap-2">
+                {tasks?.map((task) => (
+                    <TaskItem key={task._id} task={task} handelDeleteTask={handelDeleteTask} updateTask={updateTask} />
+                ))}
+            </div>
+        </div>
     );
 };
 

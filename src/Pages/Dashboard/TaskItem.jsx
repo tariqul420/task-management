@@ -8,10 +8,10 @@ const TaskItem = ({ task, handelDeleteTask }) => {
 
     return (
         <>
-            <div className="flex justify-between w-full items-center shadow-md p-4 bg-white rounded-lg">
+            <div className="flex justify-between w-full items-center shadow-md p-4 dark:bg-[#1f2a3e] rounded-lg">
                 <div>
                     <h3 className="font-semibold">{task?.title} <span className="font-normal text-base">({task?.category})</span></h3>
-                    <p className="text-sm text-gray-600">{task.description}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">{task.description}</p>
                 </div>
                 <div className="flex gap-3">
                     <button

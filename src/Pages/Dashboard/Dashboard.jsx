@@ -1,7 +1,17 @@
-import { FaListUl, FaSpinner, FaCheckCircle, FaPlus, FaUserCircle } from "react-icons/fa";
-import { NavLink, Outlet } from "react-router";
+import { FaCheckCircle, FaListUl, FaPlus, FaSpinner, FaUserCircle } from "react-icons/fa";
+import { MdLogout } from "react-icons/md";
+import { NavLink, Outlet, useNavigate } from "react-router";
+import useAuth from "../../Hook/useAuth";
 
 const Dashboard = () => {
+const { logOutUser} = useAuth();
+    const navigate = useNavigate();
+
+    const handelLogout = async()=>{
+        await logOutUser();
+        navigate('/login')
+    }
+
     return (
         <section className="grid grid-cols-12 min-h-screen bg-gray-100 gap-4">
             {/* Sidebar - Fixed */}
@@ -51,14 +61,21 @@ const Dashboard = () => {
                     <input 
                         type="text" 
                         placeholder="Search tasks..." 
-                        className="p-2 w-3/4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="p-2 w-2/4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
 
                     <div className="flex items-center gap-6">
                         {/* Add Task Button */}
-                        <button className="items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition inline-flex">
+                        <button className="items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition inline-flex cursor-pointer">
                             <FaPlus />
                             <span>Add Task</span>
+                        </button>
+
+                        <button
+                        onClick={handelLogout}
+                         className="items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition inline-flex cursor-pointer">
+                        <MdLogout />
+                            <span>Logout</span>
                         </button>
 
                         {/* Profile Icon */}

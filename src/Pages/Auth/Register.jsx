@@ -1,12 +1,12 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 import { MdError } from "react-icons/md";
 import { useNavigate } from "react-router";
 import useAuth from "../../Hook/useAuth";
 import saveUser from "../../api/saveUser";
-import toast from "react-hot-toast";
 
 
 const Register = () => {
@@ -27,7 +27,7 @@ const Register = () => {
             await updateUserProfile(fullName)
             await saveUser({ ...result?.user, displayName: fullName })
             toast.success("Registration successfully ❤️")
-            navigate('/')
+            navigate('/dashboard/todo')
             reset()
         } catch (error) {
             if (error.code === 'auth/email-already-in-use') {

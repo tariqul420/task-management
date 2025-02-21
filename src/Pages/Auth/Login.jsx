@@ -3,12 +3,11 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 import { MdError } from "react-icons/md";
-import { useLocation, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import useAuth from "../../Hook/useAuth";
 
 const Login = () => {
     const navigate = useNavigate()
-    const location = useLocation()
     const [isEyeOpen, setIsEyeOpen] = useState(false);
     const { register, handleSubmit, reset, formState: { errors } } = useForm()
     const { setEmail, loginUser, loading, setLoading } = useAuth()
@@ -23,7 +22,7 @@ const Login = () => {
             await loginUser(email, password)
             setEmail('')
             toast.success('Login Successfully ❤️')
-            navigate(location?.state?.from ? location?.state?.from : '/', { replace: true })
+            navigate('/dashboard/todo')
             reset()
         } catch (error) {
             if (error.code === "auth/invalid-credential") {

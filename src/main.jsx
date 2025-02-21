@@ -8,6 +8,7 @@ import Home from './Pages/Home';
 import { Toaster } from 'react-hot-toast'
 import Dashboard from './Pages/Dashboard/Dashboard.jsx';
 import ToDo from './Pages/Dashboard/ToDo/ToDo.jsx';
+import Login_Register from './Pages/Auth/Login_Register.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -16,6 +17,7 @@ createRoot(document.getElementById('root')).render(
  <Routes>
     <Route path="/" element={<Root />}>
     <Route index element={<Home />} />
+    <Route path='login' element={<Login_Register/>}/>
     <Route path="dashboard/*" element={<Dashboard />} >
     <Route path='todo' element={<ToDo />} />
     </Route>

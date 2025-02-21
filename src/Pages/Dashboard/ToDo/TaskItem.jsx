@@ -10,7 +10,7 @@ const TaskItem = ({ task, deleteTask, updateTask }) => {
     const [description, setDescription] = useState(task.description);
 
     // Make the task draggable
-    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: task.id });
+    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: task._id });
 
     // Apply drag styles
     const style = {
@@ -20,7 +20,7 @@ const TaskItem = ({ task, deleteTask, updateTask }) => {
 
     // Save edited task
     const saveTask = () => {
-        updateTask(task.id, title, description);
+        updateTask(task._id, title, description);
         setIsEditing(false);
     };
 
@@ -61,7 +61,7 @@ const TaskItem = ({ task, deleteTask, updateTask }) => {
                         <button onClick={() => setIsEditing(true)} className="text-yellow-500 hover:text-yellow-600">
                             <FaEdit />
                         </button>
-                        <button onClick={() => deleteTask(task.id)} className="text-red-500 hover:text-red-600">
+                        <button onClick={() => deleteTask(task._id)} className="text-red-500 hover:text-red-600">
                             <FaTrash />
                         </button>
                     </div>
@@ -75,6 +75,6 @@ TaskItem.propTypes = {
     task: PropTypes.object.isRequired,
     deleteTask: PropTypes.func.isRequired,
     updateTask: PropTypes.func.isRequired,
-}
+};
 
 export default TaskItem;

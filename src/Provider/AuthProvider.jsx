@@ -48,6 +48,13 @@ const AuthProvider = ({ children }) => {
                 const userInformation = { email: currentUser?.email }
                 await axios.post(`${import.meta.env.VITE_SERVER_API_URL}/jwt`, userInformation, { withCredentials: true })
 
+                await axios.post(`${import.meta.env.VITE_SERVER_API_URL}/users`, {
+                    name: user?.displayName,
+                    image: user?.photoURL,
+                    email: user?.email,
+                    uid: user?.uid,
+                })
+
                 setLoading(false)
             } else {
                 await axios.get(`${import.meta.env.VITE_SERVER_API_URL}/logout`, { withCredentials: true });
@@ -61,7 +68,7 @@ const AuthProvider = ({ children }) => {
         return () => {
             unsubscribe()
         }
-    }, []);
+    }, [user?.displayName, user?.email, user?.photoURL, user?.uid]);
 
     const authInfo = {
         socialAuth,

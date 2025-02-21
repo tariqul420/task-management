@@ -5,7 +5,6 @@ import { BsEye, BsEyeSlash } from "react-icons/bs";
 import { MdError } from "react-icons/md";
 import { useNavigate } from "react-router";
 import useAuth from "../../Hook/useAuth";
-import saveUser from "../../api/saveUser";
 
 const Register = () => {
     const [isEyeOpen, setIsEyeOpen] = useState(false);
@@ -20,9 +19,8 @@ const Register = () => {
         setLoading(true);
 
         try {
-            const result = await createUser(email, password);
+            await createUser(email, password);
             await updateUserProfile(fullName);
-            await saveUser({ ...result?.user, displayName: fullName });
             toast.success("Registration successful ❤️");
             navigate('/dashboard/todo');
             reset();

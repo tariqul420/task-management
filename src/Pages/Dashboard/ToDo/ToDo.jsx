@@ -52,23 +52,6 @@ const ToDo = () => {
         }
     };
 
-    // Handle Drag End
-    // const onDragEnd = async (event) => {
-    //     const { active, over } = event;
-    //     if (!over || active.id === over.id) return;
-
-    //     const oldIndex = tasks.findIndex(task => task._id === active.id);
-    //     const newIndex = tasks.findIndex(task => task._id === over.id);
-    //     const newOrder = arrayMove(tasks, oldIndex, newIndex);
-
-    //     try {
-    //         await axiosSecure.put("/tasks/reorder", { newOrder });
-    //         queryClient.invalidateQueries(["tasks"]);
-    //     } catch (error) {
-    //         console.error("Failed to reorder tasks:", error);
-    //     }
-    // };    
-
     if (isLoading) <LoadingSkeleton />
 
     return (
@@ -131,6 +114,14 @@ const ToDo = () => {
                     <TaskItem key={task._id} task={task} handelDeleteTask={handelDeleteTask} />
                 ))}
             </div>
+
+            {
+                tasks.length === 0 && (
+                    <div className="mt-6 text-center text-gray-500 dark:text-gray-300">
+                        No tasks found. Add a new task to get started!
+                    </div>
+                )
+            }
         </div>
     );
 };

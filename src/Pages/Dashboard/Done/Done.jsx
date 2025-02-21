@@ -3,12 +3,13 @@ import TaskItem from "../TaskItem";
 import useAxiosSecure from "../../../Hook/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../../Hook/useAuth";
+import LoadingSkeleton from "../../../Loading/LoadingSkelton";
 
 const InProgress = () => {
     const axiosSecure = useAxiosSecure();
     const {user} = useAuth();
 
-    const {data: tasks = [], refetch} = useQuery({
+    const {data: tasks = [], refetch, isLoading} = useQuery({
         queryKey: ['tasks', user?.email],
         queryFn: async () => {
             const {data} = await axiosSecure.get(`/tasks/${user.email}?category=done`);
@@ -52,6 +53,7 @@ const handelDeleteTask = async (id) => {
         }
     };
 
+    if(isLoading) <LoadingSkeleton />
 
     return (
        <div className="p-6 bg-white shadow-lg rounded-xl min-h-[72vh]">

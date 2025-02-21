@@ -44,8 +44,15 @@ const AuthProvider = ({ children }) => {
             setLoading(false)
             setUser(currentUser)
 
-            if (!currentUser?.email | currentUser) {
+            if (currentUser?.email) {
+                const userInformation = { email: currentUser?.email }
+                await axios.post(`${import.meta.env.VITE_SERVER_API_URL}/jwt`, userInformation, { withCredentials: true })
+
+                setLoading(false)
+            } else {
                 await axios.get(`${import.meta.env.VITE_SERVER_API_URL}/logout`, { withCredentials: true });
+
+                setLoading(false)
             }
 
             setLoading(false)

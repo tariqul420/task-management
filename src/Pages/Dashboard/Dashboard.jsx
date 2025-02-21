@@ -81,7 +81,9 @@ const Dashboard = () => {
                         </button>
 
                         {/* Add Task Button */}
-                        <button className="items-center gap-2 bg-blue-500  px-4 py-2 rounded-lg hover:bg-blue-600 transition inline-flex cursor-pointer text-white">
+                        <button
+                        onClick={()=> navigate('/dashboard/todo')}
+                         className="items-center gap-2 bg-blue-500  px-4 py-2 rounded-lg hover:bg-blue-600 transition inline-flex cursor-pointer text-white">
                             <FaPlus />
                             <span>Add Task</span>
                         </button>

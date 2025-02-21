@@ -9,54 +9,54 @@ import LoadingSkeleton from "../../../Loading/LoadingSkelton";
 
 const ToDo = () => {
     const axiosSecure = useAxiosSecure();
-    const {user} = useAuth();
+    const { user } = useAuth();
 
-    const {data: tasks = [], refetch, isLoading} = useQuery({
+    const { data: tasks = [], refetch, isLoading } = useQuery({
         queryKey: ['tasks', user?.email],
         queryFn: async () => {
-            const {data} = await axiosSecure.get(`/tasks/${user.email}`);
+            const { data } = await axiosSecure.get(`/tasks/${user.email}`);
             return data;
         },
     })
-    
+
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
     // Add New Task
     const onSubmit = async (data) => {
         try {
             const newTask = { ...data, user: user.email, date: new Date() };
-    
+
             // Send the new task to the backend
             await axiosSecure.post("/tasks", newTask);
-            
+
             // Show success toast
             toast.success("Task added successfully ❤️");
-    
+
             // Optimistically update the UI (new task appears first)
             refetch(); // Ensure the database is updated
-    
+
             reset();
         } catch (error) {
             console.error("Failed to add task:", error);
             toast.error("Failed to add task");
         }
     };
-     
+
 
     // Delete Task
-// Delete Task
-const handelDeleteTask = async (id) => {
-    console.log("Deleting task with ID:", id);
+    // Delete Task
+    const handelDeleteTask = async (id) => {
+        console.log("Deleting task with ID:", id);
 
-    try {
-        await axiosSecure.delete(`/tasks/${id}`);
-        refetch(); // Refresh the task list after deletion
-        toast.success("Task deleted successfully ❤️");
-    } catch (error) {
-        console.error("Failed to delete task:", error);
-        toast.error("Failed to delete task");
-    }
-};
+        try {
+            await axiosSecure.delete(`/tasks/${id}`);
+            refetch(); // Refresh the task list after deletion
+            toast.success("Task deleted successfully ❤️");
+        } catch (error) {
+            console.error("Failed to delete task:", error);
+            toast.error("Failed to delete task");
+        }
+    };
 
 
     // Update Task
@@ -83,11 +83,11 @@ const handelDeleteTask = async (id) => {
     // const onDragEnd = async (event) => {
     //     const { active, over } = event;
     //     if (!over || active.id === over.id) return;
-    
+
     //     const oldIndex = tasks.findIndex(task => task._id === active.id);
     //     const newIndex = tasks.findIndex(task => task._id === over.id);
     //     const newOrder = arrayMove(tasks, oldIndex, newIndex);
-    
+
     //     try {
     //         await axiosSecure.put("/tasks/reorder", { newOrder });
     //         queryClient.invalidateQueries(["tasks"]);
@@ -96,7 +96,7 @@ const handelDeleteTask = async (id) => {
     //     }
     // };    
 
-    if(isLoading) <LoadingSkeleton />
+    if (isLoading) <LoadingSkeleton />
 
     return (
         <div className="p-6 bg-white shadow-lg rounded-xl">
@@ -147,17 +147,17 @@ const handelDeleteTask = async (id) => {
                 {/* Submit Button */}
                 <button
                     type="submit"
-                    className="mt-6 w-full bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-all flex items-center justify-center gap-2"
+                    className="mt-6 w-full bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
                     <FaPlus /> Add Task
                 </button>
             </form>
 
             <div className="mt-4 grid grid-cols-2 gap-2">
-                        {tasks?.map((task) => (
-                            <TaskItem key={task._id} task={task} handelDeleteTask={handelDeleteTask} updateTask={updateTask} />
-                        ))}
-                    </div>
+                {tasks?.map((task) => (
+                    <TaskItem key={task._id} task={task} handelDeleteTask={handelDeleteTask} updateTask={updateTask} />
+                ))}
+            </div>
         </div>
     );
 };

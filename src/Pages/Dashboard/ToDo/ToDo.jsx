@@ -17,7 +17,7 @@ const ToDo = () => {
             const { data } = await axiosSecure.get(`/tasks/${user.email}`);
             return data;
         },
-    })
+    });
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
@@ -52,23 +52,22 @@ const ToDo = () => {
         }
     };
 
-    if (isLoading) <LoadingSkeleton />
+    if (isLoading) return <LoadingSkeleton />;
 
     return (
-        <div className="p-6  shadow-lg rounded-xl">
-            <h2 className="text-2xl font-bold mb-4">To-Do Tasks</h2>
+        <div className="p-4 sm:p-6 shadow-lg rounded-xl">
+            <h2 className="text-xl sm:text-2xl font-bold mb-4">To-Do Tasks</h2>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="mb-6 p-6  rounded-lg shadow-md border border-gray-200">
-                <h3 className="text-lg font-semibold mb-4 text-gray-700 dark:text-white">Add New Task</h3>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Add Task Form */}
+            <form onSubmit={handleSubmit(onSubmit)} className="mb-6 p-4 sm:p-6 rounded-lg shadow-md border border-gray-200">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                     {/* Title Input */}
                     <div className="flex flex-col">
-                        <label className="text-gray-600 dark:text-gray-300 font-medium">Title:</label>
+                        <label className="text-sm sm:text-base text-gray-600 dark:text-gray-300 font-medium">Title:</label>
                         <input
                             {...register("title", { required: "Title is required", maxLength: 50 })}
                             type="text"
-                            className="mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+                            className="mt-1 px-3 sm:px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
                             placeholder="Enter task title"
                         />
                         {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>}
@@ -76,10 +75,10 @@ const ToDo = () => {
 
                     {/* Category Select */}
                     <div className="flex flex-col">
-                        <label className="text-gray-600 dark:text-gray-300 font-medium">Category:</label>
+                        <label className="text-sm sm:text-base text-gray-600 dark:text-gray-300 font-medium">Category:</label>
                         <select
                             {...register("category")}
-                            className="mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm  focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+                            className="mt-1 px-3 sm:px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
                         >
                             <option value="To-Do">To-Do</option>
                             <option value="In Progress">In Progress</option>
@@ -89,10 +88,10 @@ const ToDo = () => {
 
                     {/* Description Input */}
                     <div className="md:col-span-2 flex flex-col">
-                        <label className="text-gray-600 dark:text-gray-300 font-medium">Description:</label>
+                        <label className="text-sm sm:text-base text-gray-600 dark:text-gray-300 font-medium">Description:</label>
                         <textarea
                             {...register("description", { maxLength: 200 })}
-                            className="mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition resize-none"
+                            className="mt-1 px-3 sm:px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition resize-none"
                             placeholder="Enter description (optional)"
                             rows="3"
                         ></textarea>
@@ -103,25 +102,25 @@ const ToDo = () => {
                 {/* Submit Button */}
                 <button
                     type="submit"
-                    className="mt-6 w-full bg-blue-500  font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    className="mt-6 w-full bg-blue-500 font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
                     <FaPlus /> Add Task
                 </button>
             </form>
 
-            <div className="mt-4 grid grid-cols-2 gap-2">
+            {/* Task List */}
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {tasks?.map((task) => (
                     <TaskItem key={task._id} task={task} handelDeleteTask={handelDeleteTask} />
                 ))}
             </div>
 
-            {
-                tasks.length === 0 && (
-                    <div className="mt-6 text-center text-gray-500 dark:text-gray-300">
-                        No tasks found. Add a new task to get started!
-                    </div>
-                )
-            }
+            {/* Empty State */}
+            {tasks.length === 0 && (
+                <div className="mt-6 text-center text-gray-500 dark:text-gray-300">
+                    No tasks found. Add a new task to get started!
+                </div>
+            )}
         </div>
     );
 };

@@ -28,28 +28,32 @@ function UpdateModal({ isOpen, setIsOpen, task }) {
         <>
             <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-50">
                 <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-                    <DialogPanel className="max-w-lg space-y-4 border bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg dark:border-gray-700">
+                    <DialogPanel className="w-full max-w-md sm:max-w-lg space-y-4 border bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-lg shadow-lg dark:border-gray-700">
+                        {/* Close Button */}
                         <div className='flex justify-end cursor-pointer'>
                             <button
                                 onClick={() => setIsOpen(false)}>
                                 <CgCloseR size={24} className="text-gray-800 dark:text-gray-200" />
                             </button>
                         </div>
+
+                        {/* Modal Title */}
                         <DialogTitle className="font-bold text-center text-xl dark:text-gray-200">
                             <p>Update Task</p>
                         </DialogTitle>
 
+                        {/* Modal Content */}
                         <Description>
-                            <form onSubmit={handleSubmit(onSubmit)} className="mb-6 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                                <div className="grid grid-cols-1 gap-4">
                                     {/* Title Input */}
                                     <div className="flex flex-col">
-                                        <label className="text-gray-600 dark:text-gray-300 font-medium">Title:</label>
+                                        <label className="text-sm sm:text-base text-gray-600 dark:text-gray-300 font-medium">Title:</label>
                                         <input
                                             defaultValue={task?.title}
                                             {...register("title", { required: "Title is required", maxLength: 50 })}
                                             type="text"
-                                            className="mt-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition dark:bg-gray-700 dark:text-gray-200"
+                                            className="mt-1 px-3 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition dark:bg-gray-700 dark:text-gray-200"
                                             placeholder="Enter task title"
                                         />
                                         {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>}
@@ -57,11 +61,11 @@ function UpdateModal({ isOpen, setIsOpen, task }) {
 
                                     {/* Category Select */}
                                     <div className="flex flex-col">
-                                        <label className="text-gray-600 dark:text-gray-300 font-medium">Category:</label>
+                                        <label className="text-sm sm:text-base text-gray-600 dark:text-gray-300 font-medium">Category:</label>
                                         <select
                                             defaultValue={task?.category}
                                             {...register("category")}
-                                            className="mt-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition dark:text-gray-200"
+                                            className="mt-1 px-3 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition dark:text-gray-200"
                                         >
                                             <option value="To-Do">To-Do</option>
                                             <option value="In Progress">In Progress</option>
@@ -70,12 +74,12 @@ function UpdateModal({ isOpen, setIsOpen, task }) {
                                     </div>
 
                                     {/* Description Input */}
-                                    <div className="md:col-span-2 flex flex-col">
-                                        <label className="text-gray-600 dark:text-gray-300 font-medium">Description:</label>
+                                    <div className="flex flex-col">
+                                        <label className="text-sm sm:text-base text-gray-600 dark:text-gray-300 font-medium">Description:</label>
                                         <textarea
                                             defaultValue={task?.description}
                                             {...register("description", { maxLength: 200 })}
-                                            className="mt-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition resize-none dark:bg-gray-700 dark:text-gray-200"
+                                            className="mt-1 px-3 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition resize-none dark:bg-gray-700 dark:text-gray-200"
                                             placeholder="Enter description (optional)"
                                             rows="3"
                                         ></textarea>
@@ -86,7 +90,7 @@ function UpdateModal({ isOpen, setIsOpen, task }) {
                                 {/* Submit Button */}
                                 <button
                                     type="submit"
-                                    className="mt-6 w-full bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-all flex items-center justify-center gap-2 cursor-pointer dark:bg-blue-600 dark:hover:bg-blue-700"
+                                    className="w-full bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-all flex items-center justify-center gap-2 cursor-pointer dark:bg-blue-600 dark:hover:bg-blue-700"
                                 >
                                     <FaPen /> Update
                                 </button>

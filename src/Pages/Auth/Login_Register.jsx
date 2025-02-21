@@ -4,11 +4,12 @@ import Login from './Login';
 
 function Login_Register() {
     return (
-        <TabGroup className="mx-auto pt-10 min-h-screen flex items-center justify-center flex-col gap-8">
-            <TabList className="flex gap-4 p-2 bg-gray-100 dark:bg-gray-800 rounded-full shadow-inner">
+        <TabGroup className="mx-auto pt-10 min-h-screen flex items-center justify-center flex-col gap-8 px-4">
+            {/* Tab List */}
+            <TabList className="flex gap-2 p-1 bg-gray-100 dark:bg-gray-800 rounded-full shadow-inner w-full max-w-md sm:max-w-lg md:max-w-xl">
                 <Tab
                     className={({ selected }) =>
-                        `px-6 py-3 rounded-full transition-all duration-300 ${
+                        `w-full px-4 py-2 sm:px-6 sm:py-3 rounded-full transition-all duration-300 text-sm sm:text-base ${
                             selected
                                 ? 'bg-blue-500 text-white shadow-lg'
                                 : 'bg-transparent text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
@@ -19,7 +20,7 @@ function Login_Register() {
                 </Tab>
                 <Tab
                     className={({ selected }) =>
-                        `px-6 py-3 rounded-full transition-all duration-300 ${
+                        `w-full px-4 py-2 sm:px-6 sm:py-3 rounded-full transition-all duration-300 text-sm sm:text-base ${
                             selected
                                 ? 'bg-blue-500 text-white shadow-lg'
                                 : 'bg-transparent text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
@@ -29,7 +30,9 @@ function Login_Register() {
                     Register
                 </Tab>
             </TabList>
-            <TabPanels className="w-full max-w-md">
+
+            {/* Tab Panels */}
+            <TabPanels className="w-full max-w-md sm:max-w-lg md:max-w-xl">
                 <TabPanel>
                     <Login />
                 </TabPanel>

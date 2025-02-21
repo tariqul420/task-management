@@ -1,9 +1,9 @@
-import toast from "react-hot-toast";
-import TaskItem from "../TaskItem";
-import useAxiosSecure from "../../../Hook/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 import useAuth from "../../../Hook/useAuth";
+import useAxiosSecure from "../../../Hook/useAxiosSecure";
 import LoadingSkeleton from "../../../Loading/LoadingSkelton";
+import TaskItem from "../TaskItem";
 
 const InProgress = () => {
     const axiosSecure = useAxiosSecure();
@@ -12,12 +12,11 @@ const InProgress = () => {
     const { data: tasks = [], refetch, isLoading } = useQuery({
         queryKey: ['tasks', user?.email],
         queryFn: async () => {
-            const { data } = await axiosSecure.get(`/tasks/${user.email}?category=done`);
+            const { data } = await axiosSecure.get(`/tasks/${user.email}?category=inProgress`);
             return data;
         },
-    })
+    });
 
-    // Delete Task
     // Delete Task
     const handelDeleteTask = async (id) => {
         console.log("Deleting task with ID:", id);
@@ -32,38 +31,25 @@ const InProgress = () => {
         }
     };
 
-
-    // Update Task
-    const updateTask = async (id, newTitle, newDescription) => {
-        try {
-            const response = await fetch(`http://localhost:8080/tasks/${id}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include", // Include cookies for authentication
-                body: JSON.stringify({ title: newTitle, description: newDescription }),
-            });
-
-            if (!response.ok) {
-                throw new Error("Failed to update task");
-            }
-        } catch (error) {
-            console.error("Failed to update task:", error);
-        }
-    };
-
-    if (isLoading) <LoadingSkeleton />
+    if (isLoading) return <LoadingSkeleton />;
 
     return (
-        <div className="p-6  shadow-lg rounded-xl min-h-[72vh]">
-            <h2 className="text-2xl font-bold mb-4">Done Task</h2>
+        <div className="p-4 sm:p-6 shadow-lg rounded-xl min-h-[72vh]">
+            <h2 className="text-xl sm:text-2xl font-bold mb-4">In Progress Tasks</h2>
 
-            <div className="mt-4 grid grid-cols-2 gap-2">
+            {/* Task List */}
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {tasks?.map((task) => (
-                    <TaskItem key={task._id} task={task} handelDeleteTask={handelDeleteTask} updateTask={updateTask} />
+                    <TaskItem key={task._id} task={task} handelDeleteTask={handelDeleteTask} />
                 ))}
             </div>
+
+            {/* Empty State */}
+            {tasks.length === 0 && (
+                <div className="mt-6 text-center text-gray-500 dark:text-gray-300">
+                    No tasks found. Add a new task to get started!
+                </div>
+            )}
         </div>
     );
 };

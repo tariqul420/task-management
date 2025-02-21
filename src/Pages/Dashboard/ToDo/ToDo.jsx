@@ -1,103 +1,62 @@
-import { DndContext, closestCenter } from "@dnd-kit/core";
-import { SortableContext, arrayMove, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { FaPlus } from "react-icons/fa";
 import useAuth from "../../../Hook/useAuth";
 import useAxiosSecure from "../../../Hook/useAxiosSecure";
-import TaskItem from "./TaskItem";
+import TaskItem from "../TaskItem";
 
 const ToDo = () => {
-    const [tasks, setTasks] = useState([]);
     const axiosSecure = useAxiosSecure();
     const {user} = useAuth();
-    const ws = new WebSocket("ws://localhost:8080");
 
-    // Fetch tasks from the backend
-    useEffect(() => {
-        const fetchTasks = async () => {
-            try {
-                axiosSecure.get("/tasks")
-                .then((response) => {
-                    setTasks(response.data);
-                }
-                );
-            } catch (error) {
-                console.error("Failed to fetch tasks:", error);
-            }
-        };
-
-        fetchTasks();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-
-    useEffect(() => {
-        ws.onmessage = (event) => {
-            const message = JSON.parse(event.data);
-            console.log('Message from server:', message);
+    const {data: tasks = [], refetch} = useQuery({
+        queryKey: ['tasks', user?.email],
+        queryFn: async () => {
+            const {data} = await axiosSecure.get(`/tasks/${user.email}`);
+            return data;
+        },
+    })
     
-            switch (message.type) {
-                case 'taskCreated':
-                    setTasks((prevTasks) => [...prevTasks, message.data]); 
-                    break;
-                case 'taskUpdated':
-                    setTasks((prevTasks) =>
-                        prevTasks.map((task) =>
-                            task._id === message.data._id ? message.data : task
-                        )
-                    );
-                    break;
-                case 'taskDeleted':
-                    setTasks((prevTasks) =>
-                        prevTasks.filter((task) => task._id !== message.data._id)
-                    );
-                    break;
-                default:
-                    console.log('Unknown message type:', message.type);
-            }
-        };
-    
-        return () => ws.close(); // Clean up on unmount
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-    
-
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
     // Add New Task
     const onSubmit = async (data) => {
         try {
-            await axiosSecure.post("/tasks", {...data, user: user.email});
+            const newTask = { ...data, user: user.email, date: new Date() };
+    
+            // Send the new task to the backend
+            await axiosSecure.post("/tasks", newTask);
+            
+            // Show success toast
             toast.success("Task added successfully ❤️");
     
-            // Fetch tasks again to ensure updates
-            const updatedTasks = await axiosSecure.get("/tasks");
-            setTasks(updatedTasks.data);
+            // Optimistically update the UI (new task appears first)
+            refetch(); // Ensure the database is updated
     
             reset();
         } catch (error) {
             console.error("Failed to add task:", error);
             toast.error("Failed to add task");
         }
-    };    
+    };
+     
 
     // Delete Task
-    const deleteTask = async (id) => {
-        try {
-            const response = await fetch(`http://localhost:8080/tasks/${id}`, {
-                method: "DELETE",
-                credentials: "include", // Include cookies for authentication
-            });
+// Delete Task
+const handelDeleteTask = async (id) => {
+    console.log("Deleting task with ID:", id);
 
-            if (!response.ok) {
-                throw new Error("Failed to delete task");
-            }
-        } catch (error) {
-            console.error("Failed to delete task:", error);
-        }
-    };
+    try {
+        await axiosSecure.delete(`/tasks/${id}`);
+        refetch(); // Refresh the task list after deletion
+        toast.success("Task deleted successfully ❤️");
+    } catch (error) {
+        console.error("Failed to delete task:", error);
+        toast.error("Failed to delete task");
+    }
+};
+
 
     // Update Task
     const updateTask = async (id, newTitle, newDescription) => {
@@ -120,14 +79,21 @@ const ToDo = () => {
     };
 
     // Handle Drag End
-    const onDragEnd = (event) => {
-        const { active, over } = event;
-        if (active.id !== over.id) {
-            const oldIndex = tasks.findIndex((task) => task._id === active.id);
-            const newIndex = tasks.findIndex((task) => task._id === over.id);
-            setTasks(arrayMove(tasks, oldIndex, newIndex));
-        }
-    };
+    // const onDragEnd = async (event) => {
+    //     const { active, over } = event;
+    //     if (!over || active.id === over.id) return;
+    
+    //     const oldIndex = tasks.findIndex(task => task._id === active.id);
+    //     const newIndex = tasks.findIndex(task => task._id === over.id);
+    //     const newOrder = arrayMove(tasks, oldIndex, newIndex);
+    
+    //     try {
+    //         await axiosSecure.put("/tasks/reorder", { newOrder });
+    //         queryClient.invalidateQueries(["tasks"]);
+    //     } catch (error) {
+    //         console.error("Failed to reorder tasks:", error);
+    //     }
+    // };    
 
     return (
         <div className="p-6 bg-white shadow-lg rounded-xl">
@@ -184,16 +150,11 @@ const ToDo = () => {
                 </button>
             </form>
 
-            {/* Drag-and-Drop Task List */}
-            <DndContext collisionDetection={closestCenter} onDragEnd={onDragEnd}>
-                <SortableContext items={tasks.map((task) => task._id)} strategy={verticalListSortingStrategy}>
-                    <div className="mt-4 space-y-2">
+            <div className="mt-4 grid grid-cols-2 gap-2">
                         {tasks?.map((task) => (
-                            <TaskItem key={task._id} task={task} deleteTask={deleteTask} updateTask={updateTask} />
+                            <TaskItem key={task._id} task={task} handelDeleteTask={handelDeleteTask} updateTask={updateTask} />
                         ))}
                     </div>
-                </SortableContext>
-            </DndContext>
         </div>
     );
 };

@@ -16,6 +16,7 @@ import {
 } from '@tanstack/react-query'
 import InProgress from './Pages/Dashboard/InProgress/InProgress.jsx';
 import ThemeProvider from './Provider/ThemeProvider.jsx';
+import Error from './Pages/Error/Error.jsx';
 
 const queryClient = new QueryClient()
 
@@ -27,6 +28,7 @@ createRoot(document.getElementById('root')).render(
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Root />}>
+                <Route path='*' element={<Error />} />
                 <Route index element={<Home />} />
                 <Route path='login' element={<Login_Register />} />
                 <Route path="dashboard/*" element={<Dashboard />} >

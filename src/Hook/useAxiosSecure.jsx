@@ -21,7 +21,7 @@ const useAxiosSecure = () => {
             if (err.status === 401 || err.status === 403) {
                 try {
                     await logOutUser();
-                    navigate('/')
+                    navigate('/login')
                 } catch (error) {
                     toast.error(error.message);
                 }

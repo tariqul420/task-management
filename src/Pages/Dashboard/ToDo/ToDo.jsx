@@ -2,6 +2,7 @@ import { DndContext, closestCenter } from "@dnd-kit/core";
 import { SortableContext, arrayMove, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { FaPlus } from "react-icons/fa";
 import useAuth from "../../../Hook/useAuth";
 import useAxiosSecure from "../../../Hook/useAxiosSecure";
@@ -11,6 +12,7 @@ const ToDo = () => {
     const [tasks, setTasks] = useState([]);
     const axiosSecure = useAxiosSecure();
     const {user} = useAuth();
+    const ws = new WebSocket("ws://localhost:8080");
 
     // Fetch tasks from the backend
     useEffect(() => {
@@ -30,36 +32,36 @@ const ToDo = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // WebSocket connection for real-time updates
-    useEffect(() => {
-        const ws = new WebSocket("ws://localhost:8080");
 
+    useEffect(() => {
         ws.onmessage = (event) => {
             const message = JSON.parse(event.data);
-
+            console.log('Message from server:', message);
+    
             switch (message.type) {
-                case "taskCreated":
-                    setTasks((prevTasks) => [...prevTasks, message.data]);
+                case 'taskCreated':
+                    setTasks((prevTasks) => [...prevTasks, message.data]); 
                     break;
-                case "taskUpdated":
+                case 'taskUpdated':
                     setTasks((prevTasks) =>
                         prevTasks.map((task) =>
                             task._id === message.data._id ? message.data : task
                         )
                     );
                     break;
-                case "taskDeleted":
+                case 'taskDeleted':
                     setTasks((prevTasks) =>
                         prevTasks.filter((task) => task._id !== message.data._id)
                     );
                     break;
                 default:
-                    console.log("Unknown message type:", message.type);
+                    console.log('Unknown message type:', message.type);
             }
         };
-
-        return () => ws.close();
+    
+        return () => ws.close(); // Clean up on unmount
     }, []);
+    
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
@@ -67,12 +69,18 @@ const ToDo = () => {
     const onSubmit = async (data) => {
         try {
             await axiosSecure.post("/tasks", {...data, user: user.email});
-
+            toast.success("Task added successfully ❤️");
+    
+            // Fetch tasks again to ensure updates
+            const updatedTasks = await axiosSecure.get("/tasks");
+            setTasks(updatedTasks.data);
+    
             reset();
         } catch (error) {
             console.error("Failed to add task:", error);
+            toast.error("Failed to add task");
         }
-    };
+    };    
 
     // Delete Task
     const deleteTask = async (id) => {

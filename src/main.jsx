@@ -9,10 +9,17 @@ import { Toaster } from 'react-hot-toast'
 import Dashboard from './Pages/Dashboard/Dashboard.jsx';
 import ToDo from './Pages/Dashboard/ToDo/ToDo.jsx';
 import Login_Register from './Pages/Auth/Login_Register.jsx';
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
+
+const queryClient = new QueryClient()
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
- <AuthProvider>
+<QueryClientProvider client={queryClient}>
+<AuthProvider>
  <BrowserRouter>
  <Routes>
     <Route path="/" element={<Root />}>
@@ -26,5 +33,6 @@ createRoot(document.getElementById('root')).render(
 <Toaster position='top-right' reverseOrder={false} />
   </BrowserRouter>
     </AuthProvider>
+</QueryClientProvider>
   </StrictMode>,
 )

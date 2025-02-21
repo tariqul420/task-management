@@ -60,6 +60,7 @@ const ToDo = () => {
         };
     
         return () => ws.close(); // Clean up on unmount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     
 

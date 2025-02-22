@@ -1,15 +1,19 @@
-import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import useAuth from "../../../Hook/useAuth";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { DndContext, closestCenter } from "@dnd-kit/core";
+import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import useAxiosSecure from "../../../Hook/useAxiosSecure";
+import useAuth from "../../../Hook/useAuth";
 import LoadingSkeleton from "../../../Loading/LoadingSkelton";
 import TaskItem from "../TaskItem";
 
 const InProgress = () => {
     const axiosSecure = useAxiosSecure();
     const { user } = useAuth();
+    const [tasks, setTasks] = useState([]);
 
-    const { data: tasks = [], refetch, isLoading } = useQuery({
+    const { data: taskData, refetch, isLoading } = useQuery({
         queryKey: ['tasks', user?.email],
         queryFn: async () => {
             const { data } = await axiosSecure.get(`/tasks/${user.email}?category=done`);
@@ -17,17 +21,37 @@ const InProgress = () => {
         },
     });
 
+    useEffect(() => {
+        if (taskData) {
+            setTasks(taskData);
+        }
+    }, [taskData]);
+
     // Delete Task
     const handelDeleteTask = async (id) => {
         console.log("Deleting task with ID:", id);
 
         try {
             await axiosSecure.delete(`/tasks/${id}`);
-            refetch(); // Refresh the task list after deletion
+            refetch();
             toast.success("Task deleted successfully ❤️");
         } catch (error) {
             console.error("Failed to delete task:", error);
             toast.error("Failed to delete task");
+        }
+    };
+
+    // Handle Drag-and-Drop Reorder
+    const handleDragEnd = (event) => {
+        const { active, over } = event;
+        if (!over || active.id === over.id) return;
+
+        const oldIndex = tasks.findIndex((task) => task._id === active.id);
+        const newIndex = tasks.findIndex((task) => task._id === over.id);
+
+        if (oldIndex !== -1 && newIndex !== -1) {
+            const updatedTasks = arrayMove(tasks, oldIndex, newIndex);
+            setTasks(updatedTasks);
         }
     };
 
@@ -38,11 +62,15 @@ const InProgress = () => {
             <h2 className="text-xl sm:text-2xl font-bold mb-4">In Progress Tasks</h2>
 
             {/* Task List */}
-            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {tasks?.map((task) => (
-                    <TaskItem key={task._id} task={task} handelDeleteTask={handelDeleteTask} />
-                ))}
-            </div>
+            <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                <SortableContext items={tasks.map(t => t._id)} strategy={verticalListSortingStrategy}>
+                    <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {tasks?.map((task) => (
+                            <TaskItem key={task._id} task={task} handelDeleteTask={handelDeleteTask} />
+                        ))}
+                    </div>
+                </SortableContext>
+            </DndContext>
 
             {/* Empty State */}
             {tasks.length === 0 && (

@@ -14,7 +14,7 @@ const ToDo = () => {
     const { data: tasks = [], refetch, isLoading } = useQuery({
         queryKey: ['tasks', user?.email],
         queryFn: async () => {
-            const { data } = await axiosSecure.get(`/tasks/${user.email}`);
+            const { data } = await axiosSecure.get(`/tasks/${user.email}?category=""`);
             return data;
         },
     });

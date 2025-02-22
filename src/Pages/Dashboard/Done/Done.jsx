@@ -12,7 +12,7 @@ const InProgress = () => {
     const { data: tasks = [], refetch, isLoading } = useQuery({
         queryKey: ['tasks', user?.email],
         queryFn: async () => {
-            const { data } = await axiosSecure.get(`/tasks/${user.email}?category=inProgress`);
+            const { data } = await axiosSecure.get(`/tasks/${user.email}?category=done`);
             return data;
         },
     });

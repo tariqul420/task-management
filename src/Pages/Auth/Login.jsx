@@ -5,6 +5,7 @@ import { BsEye, BsEyeSlash } from "react-icons/bs";
 import { MdError } from "react-icons/md";
 import { useNavigate } from "react-router";
 import useAuth from "../../Hook/useAuth";
+import AuthBtn from "./AuthBtn";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -14,7 +15,6 @@ const Login = () => {
 
     const onSubmit = async (data) => {
         const { email, password } = data;
-
         setLoading(true);
 
         try {
@@ -38,11 +38,10 @@ const Login = () => {
 
     return (
         <div className="max-w-md mx-auto p-4 sm:p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+            <h3 className="text-xl sm:text-2xl font-bold text-center text-gray-800 dark:text-gray-200">
+                Login
+            </h3>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
-                <h3 className="text-xl sm:text-2xl font-bold text-center text-gray-800 dark:text-gray-200">
-                    Login
-                </h3>
-
                 {/* Email Input */}
                 <div>
                     <label className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">Email</label>
@@ -108,6 +107,10 @@ const Login = () => {
                     {loading ? 'Logging in...' : 'Login'}
                 </button>
             </form>
+
+            <div className="mt-4">
+                <AuthBtn />
+            </div>
         </div>
     );
 };

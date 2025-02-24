@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
 import PropTypes from "prop-types";
 import { createContext, useEffect, useState } from "react";
 import auth from "../Firebase/Firebase.init";
@@ -15,6 +15,14 @@ const AuthProvider = ({ children }) => {
     const socialAuth = (provider) => {
         setLoading(true)
         return signInWithPopup(auth, provider)
+    }
+
+    const updateUserProfile = (name, photoUrl) => {
+        setLoading(true)
+        return updateProfile(auth.currentUser, {
+            displayName: name,
+            photoURL: photoUrl
+        })
     }
 
     const createUser = (email, password) => {
@@ -79,7 +87,8 @@ const AuthProvider = ({ children }) => {
         logOutUser,
         resetPassword,
         email,
-        setEmail
+        setEmail,
+        updateUserProfile
     }
 
     return (

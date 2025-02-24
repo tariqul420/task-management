@@ -102,56 +102,60 @@ const ManageTask = () => {
                         <h2 className="text-xl font-bold mb-4 text-center text-black dark:text-white">{category}</h2>
                         <Droppable droppableId={category}>
                             {(provided) => (
-                                <ul
+                                <div
                                     {...provided.droppableProps}
                                     ref={provided.innerRef}
                                     className="p-4 rounded"
                                 >
-                                    {categorizedTasks[category].map((task, index) => (
-                                        <Draggable key={task._id} draggableId={task._id} index={index}>
-                                            {(provided) => (
-                                                <div
-                                                    ref={provided.innerRef}
-                                                    {...provided.draggableProps}
-                                                    {...provided.dragHandleProps}
-                                                    className="flex justify-between w-full shadow-md p-3 sm:p-4 dark:bg-[#1f2a3e] rounded-lg cursor-move mb-4"
-                                                >
-                                                    {/* Task Details */}
-                                                    <div className="flex-1">
-                                                        <h3 className="font-semibold text-sm sm:text-base">
-                                                            {task?.title}{" "}
-                                                        </h3>
-                                                        <p>{new Date(task?.date).toLocaleDateString("en-US", {
-                                                            year: "numeric",
-                                                            month: "long",
-                                                            day: "numeric"
-                                                        })}</p>
-                                                        <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
-                                                            {task.description}
-                                                        </p>
+                                    {categorizedTasks[category].length > 0 ? (
+                                        categorizedTasks[category].map((task, index) => (
+                                            <Draggable key={task._id} draggableId={task._id} index={index}>
+                                                {(provided) => (
+                                                    <div
+                                                        ref={provided.innerRef}
+                                                        {...provided.draggableProps}
+                                                        {...provided.dragHandleProps}
+                                                        className="flex justify-between w-full shadow-md p-3 sm:p-4 dark:bg-[#1f2a3e] rounded-lg cursor-move mb-4"
+                                                    >
+                                                        {/* Task Details */}
+                                                        <div className="flex-1">
+                                                            <h3 className="font-semibold text-sm sm:text-base">
+                                                                {task?.title}
+                                                            </h3>
+                                                            <p>{new Date(task?.date).toLocaleDateString("en-US", {
+                                                                year: "numeric",
+                                                                month: "long",
+                                                                day: "numeric"
+                                                            })}</p>
+                                                            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
+                                                                {task.description}
+                                                            </p>
+                                                        </div>
+
+                                                        {/* Action Buttons */}
+                                                        <div className="flex flex-col gap-1 items-end">
+                                                            <button className={`px-2 py-1 bg-[#2b7fff] rounded-md `}>{task?.category}</button>
+
+                                                            <button
+                                                                onClick={() => handleDelete(task?._id)}
+                                                                className={`px-2 py-1 bg-red-500 rounded-md cursor-pointer`}>Delete</button>
+
+                                                            <button
+                                                                onClick={() => setIsOpen(true)}
+                                                                className={`px-4 py-1 bg-yellow-500 rounded-md cursor-pointer`}>Edit</button>
+                                                        </div>
+
+                                                        {/* Edit Modal */}
+                                                        <UpdateModal isOpen={isOpen} setIsOpen={setIsOpen} task={task} />
                                                     </div>
-
-                                                    {/* Action Buttons */}
-                                                    <div className="flex flex-col gap-1 items-end">
-                                                        <button className={`px-2 py-1 bg-[#2b7fff] rounded-md `}>{task?.category}</button>
-
-                                                        <button
-                                                            onClick={() => handleDelete(task?._id)}
-                                                            className={`px-2 py-1 bg-red-500 rounded-md cursor-pointer`}>Delete</button>
-
-                                                        <button
-                                                            onClick={() => setIsOpen(true)}
-                                                            className={`px-4 py-1 bg-yellow-500 rounded-md cursor-pointer`}>Edit</button>
-                                                    </div>
-
-                                                    {/* Edit Modal */}
-                                                    <UpdateModal isOpen={isOpen} setIsOpen={setIsOpen} task={task} />
-                                                </div>
-                                            )}
-                                        </Draggable>
-                                    ))}
+                                                )}
+                                            </Draggable>
+                                        ))
+                                    ) : (
+                                        <p className="text-center text-gray-500 dark:text-gray-300">No tasks available</p>
+                                    )}
                                     {provided.placeholder}
-                                </ul>
+                                </div>
                             )}
                         </Droppable>
                     </div>

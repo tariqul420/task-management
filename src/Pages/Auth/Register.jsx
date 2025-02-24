@@ -5,19 +5,17 @@ import { BsEye, BsEyeSlash } from "react-icons/bs";
 import { MdError } from "react-icons/md";
 import { useNavigate } from "react-router";
 import useAuth from "../../Hook/useAuth";
+import AuthBtn from "./AuthBtn";
 
 const Register = () => {
     const [isEyeOpen, setIsEyeOpen] = useState(false);
-    const [isEyeOpenRe, setIsEyeOpenRe] = useState(false);
-    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm();
+    const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const { createUser, updateUserProfile, loading, setLoading } = useAuth();
     const navigate = useNavigate();
 
     const onSubmit = async (data) => {
         const { fullName, email, password } = data;
-
         setLoading(true);
-
         try {
             await createUser(email, password);
             await updateUserProfile(fullName);
@@ -25,6 +23,7 @@ const Register = () => {
             navigate('/dashboard/manage-task');
             reset();
         } catch (error) {
+            console.error(error);
             if (error.code === 'auth/email-already-in-use') {
                 toast.error('User already exists!');
                 reset();
@@ -38,7 +37,7 @@ const Register = () => {
 
     return (
         <div className="max-w-md mx-auto p-4 sm:p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <h3 className="text-xl sm:text-2xl font-bold text-center text-gray-800 dark:text-gray-200">
                     Register
                 </h3>
@@ -95,6 +94,7 @@ const Register = () => {
                             type="button"
                             className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 dark:text-gray-400"
                             onClick={() => setIsEyeOpen(!isEyeOpen)}
+                            aria-label={isEyeOpen ? "Hide password" : "Show password"}
                         >
                             {isEyeOpen ? <BsEyeSlash size={20} /> : <BsEye size={20} />}
                         </button>
@@ -106,42 +106,19 @@ const Register = () => {
                     )}
                 </div>
 
-                {/* Confirm Password Input */}
-                <div>
-                    <label className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">Confirm Password</label>
-                    <div className="relative">
-                        <input
-                            type={isEyeOpenRe ? "text" : "password"}
-                            placeholder="Confirm Password"
-                            className="mt-1 block w-full px-3 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition dark:bg-gray-700 dark:text-gray-200"
-                            {...register("confirmPassword", {
-                                required: 'Confirm Password is required',
-                                validate: value => value === watch('password') || 'Passwords do not match'
-                            })}
-                        />
-                        <button
-                            type="button"
-                            className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 dark:text-gray-400"
-                            onClick={() => setIsEyeOpenRe(!isEyeOpenRe)}
-                        >
-                            {isEyeOpenRe ? <BsEyeSlash size={20} /> : <BsEye size={20} />}
-                        </button>
-                    </div>
-                    {errors.confirmPassword && (
-                        <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
-                            <MdError /> {errors.confirmPassword.message}
-                        </p>
-                    )}
-                </div>
-
                 {/* Submit Button */}
                 <button
                     type="submit"
                     disabled={loading}
-                    className="w-full px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full px-4 mt-2 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {loading ? 'Registering...' : 'Register'}
                 </button>
+
+                {/* Google Login */}
+                <div className="">
+                    <AuthBtn />
+                </div>
             </form>
         </div>
     );

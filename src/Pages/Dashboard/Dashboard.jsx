@@ -71,7 +71,7 @@ const Dashboard = () => {
 
                         {/* Add Task Button */}
                         <button
-                            onClick={() => navigate('/dashboard/manage-task')}
+                            onClick={() => navigate('/dashboard/add-task')}
                             className="flex items-center gap-2 bg-blue-500 px-3 lg:px-4 py-2 rounded-lg hover:bg-blue-600 transition cursor-pointer text-white"
                         >
                             <FaPlus />

@@ -1,6 +1,6 @@
-import { Navigate, Outlet } from "react-router";
-import Skeleton from "react-loading-skeleton";
+import { ImSpinner6 } from "react-icons/im";
 import "react-loading-skeleton/dist/skeleton.css";
+import { Navigate, Outlet } from "react-router";
 import useAuth from "../Hook/useAuth";
 
 const ProtectedRoute = () => {
@@ -9,9 +9,7 @@ const ProtectedRoute = () => {
     if (loading) {
         return (
             <div className="h-screen flex items-center justify-center">
-                <div className="w-full max-w-md p-6">
-                    <Skeleton height={40} count={4} />
-                </div>
+                <ImSpinner6 size={40} className="animate-spin" />
             </div>
         );
     }

@@ -6,10 +6,9 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import './index.css';
 import Root from './Layouts/Root.jsx';
 import Login_Register from './Pages/Auth/Login_Register.jsx';
+import AddTask from './Pages/Dashboard/AddTask/AddTask.jsx';
 import Dashboard from './Pages/Dashboard/Dashboard.jsx';
-import Done from './Pages/Dashboard/Done/Done.jsx';
-import InProgress from './Pages/Dashboard/InProgress/InProgress.jsx';
-import ToDo from './Pages/Dashboard/ToDo/ToDo.jsx';
+import ManageTask from './Pages/Dashboard/ManageTask/ManageTask.jsx';
 import Error from './Pages/Error/Error.jsx';
 import Home from './Pages/Home';
 import AuthProvider from './Provider/AuthProvider.jsx';
@@ -32,11 +31,10 @@ createRoot(document.getElementById('root')).render(
 
                 {/* Protect Dashboard Routes */}
                 <Route path="dashboard" element={<ProtectedRoute />}>
-                  <Route element={<Dashboard />}> {/* Keep layout */}
-                    <Route index element={<ToDo />} />
-                    <Route path="todo" element={<ToDo />} />
-                    <Route path="inprogress" element={<InProgress />} />
-                    <Route path="done" element={<Done />} />
+                  <Route element={<Dashboard />}> 
+                  <Route path='add-task' element={<AddTask />} />
+                    <Route index element={<ManageTask />} />
+                    <Route path="manage-task" element={<ManageTask />} />
                   </Route>
                 </Route>
               </Route>

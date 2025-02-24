@@ -2,19 +2,17 @@ import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import useAuth from "../../../Hook/useAuth";
 import useAxiosSecure from "../../../Hook/useAxiosSecure";
 import UpdateModal from "../../../Modal/UpdateModal";
 
 const ManageTask = () => {
     const axiosSecure = useAxiosSecure()
-    const { user } = useAuth()
     const [isOpen, setIsOpen] = useState(false);
 
     const { data = [], isLoading, refetch } = useQuery({
-        queryKey: ["tasks", user?.email],
+        queryKey: ["tasks"],
         queryFn: async () => {
-            const res = await axiosSecure.get(`/tasks/${user?.email}`);
+            const res = await axiosSecure.get(`/tasks`);
             return res.data;
         },
     });

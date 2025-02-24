@@ -1,4 +1,4 @@
-import { FaCheckCircle, FaListUl, FaPlus, FaSpinner, FaUserCircle } from "react-icons/fa";
+import { FaListUl, FaPlus, FaUserCircle } from "react-icons/fa";
 import { IoMdSunny } from "react-icons/io";
 import { MdDarkMode, MdLogout } from "react-icons/md";
 import { NavLink, Outlet, useNavigate } from "react-router";
@@ -6,7 +6,7 @@ import useAuth from "../../Hook/useAuth";
 import useTheme from "../../Hook/useTheme";
 
 const Dashboard = () => {
-    const { logOutUser } = useAuth();
+    const { logOutUser, user } = useAuth();
     const navigate = useNavigate();
     const { theme, toggleTheme } = useTheme();
 
@@ -18,46 +18,35 @@ const Dashboard = () => {
     return (
         <section className="grid grid-cols-1 lg:grid-cols-12 min-h-screen gap-4">
             {/* Sidebar - Fixed */}
-            <aside className="lg:col-span-3 dark:bg-[#121b27] shadow-lg p-4 lg:p-6 rounded-xl lg:h-screen lg:sticky lg:top-0">
+            <aside className="lg:col-span-2 dark:bg-[#121b27] shadow-lg p-4 lg:p-6 rounded-xl lg:h-screen lg:sticky lg:top-0">
                 <h2 className="text-xl lg:text-2xl font-bold mb-6">Task Manager</h2>
                 <nav className="flex flex-col space-y-2 lg:space-y-4">
                     <NavLink
-                        to="/dashboard/todo"
+                        to="/dashboard/add-task"
+                        className={({ isActive }) =>
+                            `flex items-center space-x-2 lg:space-x-3 p-2 lg:p-3 rounded-lg text-base lg:text-lg font-medium transition
+                            ${isActive ? "bg-blue-500 text-white" : "text-gray-700 dark:text-white hover:bg-gray-200 dark:hover:bg-[#1f2a3e]"}`
+                        }
+                    >
+                        <FaPlus />
+                        <span>Add Task</span>
+                    </NavLink>
+
+                    <NavLink
+                        to="/dashboard/manage-task"
                         className={({ isActive }) =>
                             `flex items-center space-x-2 lg:space-x-3 p-2 lg:p-3 rounded-lg text-base lg:text-lg font-medium transition
                             ${isActive ? "bg-blue-500 text-white" : "text-gray-700 dark:text-white hover:bg-gray-200 dark:hover:bg-[#1f2a3e]"}`
                         }
                     >
                         <FaListUl />
-                        <span>To-Do</span>
-                    </NavLink>
-
-                    <NavLink
-                        to="/dashboard/inprogress"
-                        className={({ isActive }) =>
-                            `flex items-center space-x-2 lg:space-x-3 p-2 lg:p-3 rounded-lg text-base lg:text-lg font-medium transition 
-                            ${isActive ? "bg-yellow-500 text-white" : "text-gray-700 dark:text-white hover:bg-gray-200 dark:hover:bg-[#1f2a3e]"}`
-                        }
-                    >
-                        <FaSpinner />
-                        <span>In Progress</span>
-                    </NavLink>
-
-                    <NavLink
-                        to="/dashboard/done"
-                        className={({ isActive }) =>
-                            `flex items-center space-x-2 lg:space-x-3 p-2 lg:p-3 rounded-lg text-base lg:text-lg font-medium transition 
-                            ${isActive ? "bg-green-500 text-white" : "text-gray-700 dark:text-white hover:bg-gray-200 dark:hover:bg-[#1f2a3e]"}`
-                        }
-                    >
-                        <FaCheckCircle />
-                        <span>Done</span>
+                        <span>Manage Task</span>
                     </NavLink>
                 </nav>
             </aside>
 
             {/* Main Content - Scrollable */}
-            <main className="lg:col-span-9 flex flex-col h-screen overflow-hidden">
+            <main className="lg:col-span-10 flex flex-col h-screen overflow-hidden">
                 {/* Sticky Navbar */}
                 <nav className="flex flex-col lg:flex-row items-center justify-between dark:bg-[#121b27] p-4 shadow-lg rounded-lg sticky top-0 z-50 gap-4 lg:gap-0">
                     {/* Search Field */}
@@ -82,7 +71,7 @@ const Dashboard = () => {
 
                         {/* Add Task Button */}
                         <button
-                            onClick={() => navigate('/dashboard/todo')}
+                            onClick={() => navigate('/dashboard/manage-task')}
                             className="flex items-center gap-2 bg-blue-500 px-3 lg:px-4 py-2 rounded-lg hover:bg-blue-600 transition cursor-pointer text-white"
                         >
                             <FaPlus />
@@ -98,10 +87,24 @@ const Dashboard = () => {
                             <span className="hidden lg:inline">Logout</span>
                         </button>
 
-                        {/* Profile Icon */}
-                        <div className="text-gray-700 text-3xl lg:text-4xl cursor-pointer dark:text-white">
-                            <FaUserCircle />
+                        {/* profile icon */}
+                        <div className="flex flex-col items-center justify-center gap-0">
+                            {
+                                user?.photoURL ? (
+                                    <img
+                                        referrerPolicy="no-referrer"
+                                        src={user.photoURL}
+                                        alt="user-photo"
+                                        className="w-10 h-10 rounded-full"
+                                    />
+                                ) : (
+                                    <div className="text-gray-700 text-3xl lg:text-4xl cursor-pointer dark:text-white">
+                                        <FaUserCircle />
+                                    </div>
+                                )
+                            }
                         </div>
+
                     </div>
                 </nav>
 

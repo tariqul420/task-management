@@ -28,7 +28,7 @@ const AddTask = () => {
     
     return (
         <div className="p-4 sm:p-6 shadow-lg rounded-xl">
-                    <h2 className="text-xl sm:text-2xl font-bold mb-4">To-Do Tasks</h2>
+                    <h2 className="text-xl sm:text-2xl text-center font-bold mb-6">Add Task</h2>
         
                     {/* Add Task Form */}
                    <form onSubmit={handleSubmit(onSubmit)} className="mb-6 p-4 sm:p-6 rounded-lg shadow-md border border-gray-200">

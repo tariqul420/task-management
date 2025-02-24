@@ -21,7 +21,7 @@ const Login = () => {
             await loginUser(email, password);
             setEmail('');
             toast.success('Login Successfully ❤️');
-            navigate('/dashboard/todo');
+            navigate('/dashboard/manage-task');
             reset();
         } catch (error) {
             if (error.code === "auth/invalid-credential") {

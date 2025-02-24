@@ -7,7 +7,7 @@ const Home = () => {
 
     return (
         user ? (
-            navigate('/dashboard/todo')
+            navigate('/dashboard/manage-task')
         ) : (
             navigate('/login')
         )

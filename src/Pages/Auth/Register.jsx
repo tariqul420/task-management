@@ -22,7 +22,7 @@ const Register = () => {
             await createUser(email, password);
             await updateUserProfile(fullName);
             toast.success("Registration successful ❤️");
-            navigate('/dashboard/todo');
+            navigate('/dashboard/manage-task');
             reset();
         } catch (error) {
             if (error.code === 'auth/email-already-in-use') {

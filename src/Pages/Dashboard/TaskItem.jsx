@@ -1,28 +1,15 @@
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import { FaEdit, FaTrash } from "react-icons/fa";
-import { useState } from "react";
-import UpdateModal from "../../Modal/UpdateModal";
 import PropTypes from "prop-types";
+import { useState } from "react";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import UpdateModal from "../../Modal/UpdateModal";
 
 const TaskItem = ({ task, handelDeleteTask }) => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: task._id });
-
-    const style = {
-        transform: CSS.Transform.toString(transform),
-        transition: transition || "transform 200ms ease",
-    };
-
     return (
         <>
             <div
-                ref={setNodeRef}
-                style={style}
                 className="flex justify-between w-full items-center shadow-md p-3 sm:p-4 dark:bg-[#1f2a3e] rounded-lg cursor-grab"
-                {...attributes}
-                {...listeners}
             >
                 {/* Task Details */}
                 <div className="flex-1">
